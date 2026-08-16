@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AGRO CRM | Financeiro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+      :root {
+        --bg-base: #edf7f0;
+        --panel: #ffffff;
+        --panel-soft: #f4faf6;
+        --primary: #4abf8a;
+        --primary-strong: #1e9a63;
+        --primary-dark: #0f6f49;
+        --primary-light: #def7ea;
+        --text: #1d2d2a;
+        --muted: #5f736b;
+        --line: #dfece6;
+        --green-1: #5cc989;
+        --green-2: #7dd8a7;
+        --green-3: #9be5be;
+        --warning: #ec5149;
+        --warning-soft: #ffe2e0;
+        --success: #39b269;
+        --success-soft: #dff8eb;
+        --shadow: 0 18px 36px rgba(16, 88, 61, 0.12);
+        
+        /* Action colors matching Agro theme */
+        --btn-main: #3b82f6;
+        --btn-main-hover: #2563eb;
+        --btn-agro: #1e9a63;
+        --btn-agro-hover: #15803d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        background: #0d0d0d;
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        padding: 18px;
+      }
+
+      .finance-shell {
+        width: min(1280px, 100%);
+        min-height: calc(100vh - 36px);
+        background: linear-gradient(180deg, #d9f4e5 0%, #ebfff3 25%, #f4fbf7 100%);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .finance-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #2ec18d 0%, #1e9a63 100%);
+        color: #ffffff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 4px 14px rgba(30, 154, 99, 0.25);
+      }
+
+      .brand-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 180px;
+      }
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        color: #ffffff;
+        font-size: 18px;
+      }
+
+      .brand-label {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        color: #ffffff;
+      }
+
+      .top-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex: 1;
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+
+      .nav-item {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        letter-spacing: 0.01em;
+        padding: 8px 18px;
+        border-radius: 20px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .nav-item:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .nav-item.active {
+        color: #ffffff;
+        font-weight: 700;
+        background: #0f6f49;
+        box-shadow: 0 2px 8px rgba(15, 111, 73, 0.4);
+      }
+
+      .topbar-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 180px;
+        justify-content: flex-end;
+      }
+
+      .user-name-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        line-height: 1.2;
+      }
+
+      .user-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      .user-role {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+      }
+
+      .user-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #1e9a63;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .finance-layout {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .finance-main {
+        width: 100%;
+        padding: 14px 18px 18px;
+        background: rgba(255, 255, 255, 0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+      }
+
+      .view-section {
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        flex: 1;
+      }
+
+      .view-section.active {
+        display: flex;
+      }
+
+      .main-header {
+        background: linear-gradient(135deg, #2ec18d 0%, #1e9a63 100%);
+        border-radius: 12px;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(30, 154, 99, 0.2);
+      }
+
+      .main-header.blue-header,
+      .main-header.green-header {
+        background: linear-gradient(135deg, #2ec18d 0%, #1e9a63 100%);
+        box-shadow: 0 4px 12px rgba(30, 154, 99, 0.2);
+      }
+
+      .main-header h1 {
+        margin: 0;
+        font-size: clamp(16px, 1.6vw, 20px);
+        color: #fff;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-action {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-action:hover {
+        background: rgba(255, 255, 255, 0.35);
+        transform: translateY(-1px);
+      }
+
+      /* Visao Geral Components */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, rgba(92, 201, 137, 0.85), rgba(62, 175, 125, 0.95));
+        border-radius: 14px;
+        padding: 12px 16px;
+        color: #fff;
+        min-height: 92px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(16, 88, 61, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .stat-card span {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        opacity: 0.95;
+        font-weight: 700;
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 6px;
+        font-size: clamp(16px, 1.4vw, 22px);
+        line-height: 1.1;
+        font-weight: 800;
+      }
+
+      .panel {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 8px 18px rgba(25, 72, 118, 0.04);
+        backdrop-filter: blur(8px);
+      }
+
+      .table-panel {
+        padding: 10px 14px;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      .table-header,
+      .table-row {
+        display: grid;
+        grid-template-columns: 1.1fr 1.8fr 1fr 1fr;
+        align-items: center;
+        gap: 12px;
+        min-height: 38px;
+      }
+
+      .table-header {
+        padding: 8px 8px;
+        border-bottom: 2px solid var(--line);
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 800;
+      }
+
+      .table-row {
+        padding: 10px 8px;
+        border-bottom: 1px dashed var(--line);
+        font-size: 12px;
+        color: var(--text);
+        transition: background 0.15s ease;
+        border-radius: 6px;
+      }
+
+      .table-row:hover {
+        background: var(--panel-soft);
+      }
+
+      .summary-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .summary-card {
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: #fff;
+        min-height: 82px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-weight: 700;
+        text-transform: uppercase;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .summary-card span {
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        opacity: 0.95;
+      }
+
+      .summary-value {
+        font-size: clamp(15px, 1.2vw, 20px);
+        margin-top: 6px;
+        line-height: 1.2;
+        font-weight: 800;
+      }
+
+      .summary-card.highlight { background: linear-gradient(90deg, #5cc989, #49b97a); }
+      .summary-card.warning { background: linear-gradient(90deg, #ff5969, #f24b56); }
+      .summary-card.success { background: linear-gradient(90deg, #39b269, #53cc82); }
+      .summary-card.neutral { background: linear-gradient(90deg, #68c184, #7bbf9f); }
+
+      .compact { grid-template-columns: 1fr 1.6fr 0.9fr 1fr 1.1fr 0.7fr 0.9fr; }
+      .compact-row { grid-template-columns: 1fr 1.6fr 0.9fr 1fr 1.1fr 0.7fr 0.9fr; }
+
+      .reports-container {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 18px 22px;
+        border: 1px solid var(--line);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .reports-filter-grid {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .search-pill-box {
+        position: relative;
+        flex: 1;
+        min-width: 220px;
+      }
+
+      .search-pill-box input {
+        width: 100%;
+        padding: 8px 38px 8px 16px;
+        border-radius: 20px;
+        border: 1.5px solid #1e9a63;
+        font-size: 13px;
+        font-style: italic;
+        outline: none;
+        color: #1e293b;
+        background: #ffffff;
+      }
+
+      .search-pill-box i {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #1e9a63;
+        font-size: 14px;
+      }
+
+      .date-filter-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #1e9a63;
+      }
+
+      .date-pill-input {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border: 1.5px solid #1e9a63;
+        border-radius: 20px;
+        padding: 4px 12px;
+        background: #fff;
+      }
+
+      .reports-btn-group {
+        display: flex;
+        gap: 10px;
+        margin-left: auto;
+      }
+
+      .btn-report-action {
+        background: linear-gradient(180deg, #2ec18d 0%, #1e9a63 100%);
+        color: #ffffff;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 8px rgba(30, 154, 99, 0.25);
+      }
+
+      .btn-report-action:hover {
+        background: linear-gradient(180deg, #23ab78 0%, #158051 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 12px rgba(30, 154, 99, 0.35);
+      }
+
+      .report-options-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+        gap: 8px 32px;
+        padding-top: 4px;
+      }
+
+      .report-checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        font-style: italic;
+        font-weight: 700;
+        color: #1e9a63;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .report-checkbox-label input[type="radio"],
+      .report-checkbox-label input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #1e9a63;
+        cursor: pointer;
+      }
+
+      .report-preview-area {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        padding: 20px;
+        min-height: 280px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        background: rgba(30, 154, 99, 0.1);
+        color: var(--primary-strong);
+      }
+
+      .action-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 2px;
+      }
+
+      .action-toolbar-left, .action-toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-tool {
+        background: linear-gradient(180deg, #2ec18d 0%, #1e9a63 100%);
+        color: #ffffff;
+        border: none;
+        padding: 8px 22px;
+        border-radius: 18px;
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(30, 154, 99, 0.25);
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-tool:hover {
+        background: linear-gradient(180deg, #23ab78 0%, #158051 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 12px rgba(30, 154, 99, 0.35);
+      }
+
+      .btn-tool:active {
+        transform: translateY(0);
+      }
+
+      /* Contas a Pagar Table Layout */
+      .cp-table-container {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #cbd5e1;
+        background: #ffffff;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      }
+
+      .cp-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        text-align: left;
+      }
+
+      .cp-table th {
+        background: #1e9a63;
+        color: #ffffff;
+        padding: 10px 10px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .cp-table th:last-child {
+        border-right: none;
+      }
+
+      .cp-table th.th-check, .cp-table td.td-check {
+        width: 36px;
+        text-align: center;
+        padding: 6px 4px;
+      }
+
+      .cp-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #e2e8f0;
+        border-right: 1px solid #e2e8f0;
+        color: #1e293b;
+        vertical-align: middle;
+      }
+
+      .cp-table td:last-child {
+        border-right: none;
+      }
+
+      .cp-table tr.selected-row {
+        background-color: #eaf8f1;
+      }
+
+      .cp-table tr:hover {
+        background-color: #f4fbf7;
+      }
+
+      /* Cleaned up hover and table header colors to AGRO Green */
+      .btn-tool:hover {
+        background: linear-gradient(180deg, #23ab78 0%, #158051 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 12px rgba(30, 154, 99, 0.35);
+      }
+
+      .btn-tool:active {
+        transform: translateY(0);
+      }
+
+      .cp-table th {
+        background: #1e9a63;
+        color: #ffffff;
+        padding: 10px 10px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .cp-table th:last-child {
+        border-right: none;
+      }
+
+      .cp-table tr.selected-row {
+        background-color: #eaf8f1;
+      }
+
+      .cp-table tr:hover {
+        background-color: #f4fbf7;
+      }
+
+      /* Category tag pill */
+      .cat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #eaf8f0;
+        border: 1px solid #c2edce;
+        color: #1b8252;
+        padding: 3px 10px;
+        border-radius: 14px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .cat-pill i {
+        font-size: 10px;
+        margin-left: 2px;
+        color: #64748b;
+      }
+
+      /* Date badge pill */
+      .date-pill {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 3px 8px;
+        display: inline-block;
+        font-weight: 500;
+      }
+
+      /* Status Badges */
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 14px;
+        font-size: 11px;
+        font-weight: 700;
+        width: 100%;
+        max-width: 95px;
+        cursor: pointer;
+      }
+
+      .status-pill.pago {
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+      }
+
+      .status-pill.agendado {
+        background: #ffedd5;
+        color: #c2410c;
+        border: 1px solid #fed7aa;
+      }
+
+      .status-pill.pendente {
+        background: #ffe4e6;
+        color: #be123c;
+        border: 1px solid #fecdd3;
+      }
+
+      .status-pill i {
+        font-size: 9px;
+        opacity: 0.7;
+      }
+
+      /* Input style empty row */
+      .empty-cell-picker {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 8px;
+        color: #94a3b8;
+      }
+
+      .cp-footer-total {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+      }
+
+      .total-pill-box {
+        background: linear-gradient(180deg, #2ec18d 0%, #1e9a63 100%);
+        color: #ffffff;
+        padding: 8px 24px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: 0 4px 10px rgba(30, 154, 99, 0.25);
+      }
+
+      .total-pill-box span {
+        font-size: 14px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .total-pill-box strong {
+        font-size: 18px;
+        font-weight: 900;
+      }
+
+      /* Checkbox styling */
+      input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        accent-color: #1e9a63;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      /* Responsive rules */
+      @media (max-width: 1100px) {
+        .finance-topbar { flex-wrap: wrap; justify-content: space-between; }
+        .brand-group, .topbar-user { min-width: auto; }
+        .top-nav { order: 3; width: 100%; flex-wrap: wrap; margin-top: 6px; }
+      }
+
+      @media (max-width: 820px) {
+        .stats-row, .summary-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .action-toolbar { flex-direction: column; align-items: stretch; }
+        .action-toolbar-left, .action-toolbar-right { justify-content: space-between; }
+        .cp-table-container { overflow-x: auto; }
+      }
+
+      @media (max-width: 480px) {
+        .stats-row, .summary-row { grid-template-columns: 1fr; }
+        body { padding: 8px; }
+      }
+
+      /* Toast notification */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #1d2d2a;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+        z-index: 1000;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Simple Modal for Adding/Editing Items */
+      .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        place-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(4px);
+      }
+      .modal-backdrop.open {
+        display: grid;
+      }
+      .modal-card {
+        background: #fff;
+        border-radius: 16px;
+        width: min(520px, 92%);
+        padding: 20px 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 12px;
+      }
+      .modal-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #1e293b;
+      }
+      .modal-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .field-group.full {
+        grid-column: span 2;
+      }
+      .field-group label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+      }
+      .field-group input, .field-group select {
+        padding: 8px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 13px;
+        outline: none;
+      }
+      .field-group input:focus, .field-group select:focus {
+        border-color: #1e9a63;
+      }
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 12px;
+      }
+      .btn-secondary {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        color: #475569;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .btn-primary-action {
+        background: #1e9a63;
+        color: #fff;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .contracts-filter-panel {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 16px 20px;
+        border: 1px solid var(--line);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .contracts-top-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .contracts-actions-group {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+      }
+
+      .contracts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+        margin-top: 6px;
+      }
+
+      .contract-card {
+        background: linear-gradient(135deg, #2ec18d 0%, #1e9a63 100%);
+        border-radius: 20px;
+        padding: 20px 24px;
+        color: #ffffff;
+        box-shadow: 0 8px 18px rgba(30, 154, 99, 0.22);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        border: 2px solid transparent;
+      }
+
+      .contract-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(30, 154, 99, 0.35);
+      }
+
+      .contract-card.selected {
+        border-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(30, 154, 99, 0.4), 0 12px 24px rgba(0,0,0,0.15);
+      }
+
+      .contract-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .contract-card-header i {
+        font-size: 28px;
+      }
+
+      .contract-card-title {
+        font-size: 22px;
+        font-weight: 900;
+        font-style: italic;
+        letter-spacing: 0.02em;
+      }
+
+      .contract-card-body {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.6;
+      }
+
+      .contract-card-body ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .contract-card-footer {
+        font-size: 15px;
+        font-weight: 800;
+        font-style: italic;
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.35);
+      }
+
+      .contract-card.accent-card {
+        background: linear-gradient(135deg, #39b269 0%, #116a42 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="finance-shell">
+      <header class="finance-topbar">
+        <div class="brand-group">
+          <div class="brand-logo" title="AGRO CRM Logo">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <div class="brand-label">AGRO CRM</div>
+        </div>
+
+        <nav class="top-nav" aria-label="Menu principal">
+          <a class="nav-item active" onclick="switchTab('visao-geral', this)">Visão geral</a>
+          <a class="nav-item" onclick="switchTab('contas-pagar', this)">Contas a pagar</a>
+          <a class="nav-item" onclick="switchTab('cobranca', this)">Cobrança</a>
+          <a class="nav-item" onclick="switchTab('contratos', this)">Contratos</a>
+          <a class="nav-item" onclick="switchTab('relatorios', this)">Relatórios</a>
+        </nav>
+
+        <div class="topbar-user">
+          <div class="user-name-block">
+            <span class="user-name">João Silva</span>
+            <span class="user-role">Vendedor</span>
+          </div>
+          <div class="user-avatar" title="João Silva">J</div>
+        </div>
+      </header>
+
+      <div class="finance-layout">
+        <main class="finance-main">
+          
+          <div id="view-visao-geral" class="view-section active">
+            <div class="main-header">
+              <h1 id="page-title">Painel Financeiro - Visão Geral</h1>
+              <div class="header-actions">
+                <button class="btn-action" onclick="showToast('Exportando dados em Excel...')">
+                  <i class="fa-solid fa-file-excel"></i> Exportar
+                </button>
+                <button class="btn-action" onclick="showToast('Atualizando indicadores...')">
+                  <i class="fa-solid fa-arrows-rotate"></i> Atualizar
+                </button>
+              </div>
+            </div>
+
+            <section class="stats-row">
+              <div class="stat-card primary">
+                <span>Saldo em Conta</span>
+                <strong>R$ 161.096,24</strong>
+              </div>
+
+              <div class="stat-card secondary">
+                <span>Vencendo hoje</span>
+                <strong>R$ 5.678,22</strong>
+              </div>
+
+              <div class="stat-card tertiary">
+                <span>Total mês</span>
+                <strong>R$ 31.978,024</strong>
+              </div>
+
+              <div class="stat-card quaternary">
+                <span>Fluxo líquido</span>
+                <strong>R$ 24.860,00</strong>
+              </div>
+            </section>
+
+            <section class="panel table-panel">
+              <div class="table-header">
+                <span>Vencimento</span>
+                <span>Classificação / Pedido</span>
+                <span>N° nota fiscal</span>
+                <span>Valor</span>
+              </div>
+
+              <div class="table-1">
+                <div class="table-row">
+                  <span><strong>18/08/2026</strong></span>
+                  <span>Ração Estimada PED 2.548</span>
+                  <span><span class="badge">NF-e 36.324</span></span>
+                  <span><strong>R$ 24,25</strong></span>
+                </div>
+
+                <div class="table-row">
+                  <span><strong>18/08/2026</strong></span>
+                  <span>Sch Sabor Frango PED 2.549</span>
+                  <span><span class="badge">NF-e 2.124</span></span>
+                  <span><strong>R$ 2.055,06</strong></span>
+                </div>
+
+                <div class="table-row">
+                  <span><strong>24/08/2026</strong></span>
+                  <span>Ração Petigre PED 2.550</span>
+                  <span><span class="badge">NF-e 169.266</span></span>
+                  <span><strong>R$ 1.689,64</strong></span>
+                </div>
+
+                <div class="table-row">
+                  <span><strong>25/08/2026</strong></span>
+                  <span>Sch Sabor Carne PED 2.551</span>
+                  <span><span class="badge">NF-e 1.189</span></span>
+                  <span><strong>R$ 1.609,27</strong></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="summary-row">
+              <div class="summary-card highlight">
+                <span>Cobrança</span>
+                <div class="summary-value">R$ 3.021,66</div>
+              </div>
+
+              <div class="summary-card warning">
+                <span>Total inadimplente</span>
+                <div class="summary-value">R$ 3.021,66</div>
+              </div>
+
+              <div class="summary-card success">
+                <span>Cobrança hoje</span>
+                <div class="summary-value">R$ 684,96</div>
+              </div>
+
+              <div class="summary-card neutral">
+                <span>Entradas hoje</span>
+                <div class="summary-value">R$ 536,77</div>
+              </div>
+            </section>
+
+            <section class="panel table-panel second-table">
+              <div class="table-header compact">
+                <span>Vencimento</span>
+                <span>Cliente</span>
+                <span>N° da compra</span>
+                <span>Data compra</span>
+                <span>Forma pagamento</span>
+                <span>Parcela</span>
+                <span>Valor</span>
+              </div>
+
+              <div class="table-2">
+                <div class="table-row compact-row">
+                  <span>18/08/2026</span>
+                  <span><strong>João da Silva Batista</strong></span>
+                  <span>#96</span>
+                  <span>13/06/2025</span>
+                  <span>Boleto 15/30/45</span>
+                  <span>(2/3)</span>
+                  <span><strong>R$ 122,24</strong></span>
+                </div>
+
+                <div class="table-row compact-row">
+                  <span>18/08/2026</span>
+                  <span><strong>Maria Catarina Oliveira</strong></span>
+                  <span>#286</span>
+                  <span>19/10/2025</span>
+                  <span>Boleto 10/20</span>
+                  <span>(2/2)</span>
+                  <span><strong>R$ 320,55</strong></span>
+                </div>
+
+                <div class="table-row compact-row">
+                  <span>24/08/2026</span>
+                  <span><strong>Anastácia de Jesus Lima</strong></span>
+                  <span>#387</span>
+                  <span>20/11/2025</span>
+                  <span>Boleto 45</span>
+                  <span>-</span>
+                  <span><strong>R$ 200,17</strong></span>
+                </div>
+
+                <div class="table-row compact-row">
+                  <span>25/08/2026</span>
+                  <span><strong>Oliveira Aparecido</strong></span>
+                  <span>#564</span>
+                  <span>07/02/2026</span>
+                  <span>Dinheiro</span>
+                  <span>-</span>
+                  <span><strong>R$ 42,00</strong></span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div id="view-contas-pagar" class="view-section">
+            <div class="main-header green-header">
+              <h1>PAINEL FINANCEIRO - CONTAS A PAGAR</h1>
+            </div>
+
+            <!-- Toolbar buttons matching image -->
+            <div class="action-toolbar">
+              <div class="action-toolbar-left">
+                <button class="btn-tool" onclick="openModal('incluir')">INCLUIR</button>
+                <button class="btn-tool" onclick="markSelectedPaid()">PAGAR</button>
+              </div>
+              <div class="action-toolbar-right">
+                <button class="btn-tool" onclick="editSelectedRow()">EDITAR</button>
+                <button class="btn-tool" onclick="deleteSelectedRows()">DELETAR</button>
+                <button class="btn-tool" onclick="showToast('Importando dados de planilha...')">IMPORTAR</button>
+              </div>
+            </div>
+
+            <!-- Table layout matching user image -->
+            <div class="cp-table-container">
+              <table class="cp-table" id="contas-pagar-table">
+                <thead>
+                  <tr>
+                    <th class="th-check">
+                      <input type="checkbox" id="check-all" onchange="toggleSelectAll(this)" />
+                    </th>
+                    <th>Data</th>
+                    <th>Categoria</th>
+                    <th>Fornecedor</th>
+                    <th>Descrição</th>
+                    <th>Qtd</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Parcela</th>
+                    <th>NF</th>
+                    <th>Valor</th>
+                    <th>Situação</th>
+                  </tr>
+                </thead>
+                <tbody id="contas-pagar-body">
+                  <!-- Row 1 -->
+                  <tr class="selected-row" data-id="1" data-val="324.25">
+                    <td class="td-check">
+                      <input type="checkbox" class="row-check" checked onchange="updateSelectedTotal()" />
+                    </td>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><span class="cat-pill">Ração <i class="fa-solid fa-chevron-down"></i></span></td>
+                    <td>Adimax</td>
+                    <td>Ração Gato 15 Kg PED 2.548</td>
+                    <td>5 SC</td>
+                    <td>Pix</td>
+                    <td>(1 / 1)</td>
+                    <td>36.324</td>
+                    <td><strong>R$324,25</strong></td>
+                    <td>
+                      <span class="status-pill pago" onclick="toggleStatus(this)">
+                        Pago <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr class="selected-row" data-id="2" data-val="2055.06">
+                    <td class="td-check">
+                      <input type="checkbox" class="row-check" checked onchange="updateSelectedTotal()" />
+                    </td>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><span class="cat-pill">Ração <i class="fa-solid fa-chevron-down"></i></span></td>
+                    <td>Adimax</td>
+                    <td>SCH Sabor Frango 20 g PED 2.549</td>
+                    <td>50 CX</td>
+                    <td>Boleto 15/30/45</td>
+                    <td>(1 / 3)</td>
+                    <td>2.124</td>
+                    <td><strong>R$2.055,06</strong></td>
+                    <td>
+                      <span class="status-pill pago" onclick="toggleStatus(this)">
+                        Pago <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr data-id="3" data-val="1689.64">
+                    <td class="td-check">
+                      <input type="checkbox" class="row-check" onchange="updateSelectedTotal()" />
+                    </td>
+                    <td><span class="date-pill">24/08/2026</span></td>
+                    <td><span class="cat-pill">Ração <i class="fa-solid fa-chevron-down"></i></span></td>
+                    <td>Pilar Cereais</td>
+                    <td>Ração Cachorro 25 Kg PED 2.550</td>
+                    <td>10 SC</td>
+                    <td>Boleto 15/30</td>
+                    <td>(2 / 3)</td>
+                    <td>169.266</td>
+                    <td><strong>R$1.689,64</strong></td>
+                    <td>
+                      <span class="status-pill agendado" onclick="toggleStatus(this)">
+                        Agenda... <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr data-id="4" data-val="1609.27">
+                    <td class="td-check">
+                      <input type="checkbox" class="row-check" onchange="updateSelectedTotal()" />
+                    </td>
+                    <td><span class="date-pill">25/08/2026</span></td>
+                    <td><span class="cat-pill">Ração <i class="fa-solid fa-chevron-down"></i></span></td>
+                    <td>Adimax</td>
+                    <td>SCH Sabor Carne 20 g PED 2.551</td>
+                    <td>30 CX</td>
+                    <td>Boleto 15/30</td>
+                    <td>(1 / 3)</td>
+                    <td>1.189</td>
+                    <td><strong>R$1.609,27</strong></td>
+                    <td>
+                      <span class="status-pill pendente" onclick="toggleStatus(this)">
+                        Pendente <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Placeholder Empty Row 1 -->
+                  <tr>
+                    <td class="td-check"><input type="checkbox" class="row-check" onchange="updateSelectedTotal()" /></td>
+                    <td><div class="empty-cell-picker"><i class="fa-regular fa-calendar"></i></div></td>
+                    <td><div class="empty-cell-picker"><span></span><i class="fa-solid fa-chevron-down"></i></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div class="empty-cell-picker"><span></span><i class="fa-solid fa-chevron-down"></i></div></td>
+                  </tr>
+
+                  <!-- Placeholder Empty Row 2 -->
+                  <tr>
+                    <td class="td-check"><input type="checkbox" class="row-check" onchange="updateSelectedTotal()" /></td>
+                    <td><div class="empty-cell-picker"><i class="fa-regular fa-calendar"></i></div></td>
+                    <td><div class="empty-cell-picker"><span></span><i class="fa-solid fa-chevron-down"></i></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div class="empty-cell-picker"><span></span><i class="fa-solid fa-chevron-down"></i></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Footer Total matching design -->
+            <div class="cp-footer-total">
+              <div class="total-pill-box">
+                <span>Total:</span>
+                <strong id="cp-total-display">R$ 2.379,31</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cobrança (Contas a Receber) View -->
+          <div id="view-cobranca" class="view-section">
+            <div class="main-header green-header">
+              <h1>PAINEL FINANCEIRO - COBRANÇA DE INADIMPLÊNCIA</h1>
+            </div>
+
+            <!-- Toolbar buttons matching image -->
+            <div class="action-toolbar">
+              <div class="action-toolbar-left">
+                <button class="btn-tool" onclick="dispararCobranca()"><i class="fa-solid fa-paper-plane"></i> DISPARAR</button>
+                <button class="btn-tool" onclick="baixarCobranca()"><i class="fa-solid fa-check"></i> BAIXAR</button>
+              </div>
+              <div class="action-toolbar-right">
+                <button class="btn-tool" onclick="showToast('Selecione um título para editar.')">EDITAR</button>
+                <button class="btn-tool" onclick="deleteCobrancaRows()">DELETAR</button>
+                <button class="btn-tool" onclick="showToast('Importando planilha de contas a receber...')">IMPORTAR</button>
+              </div>
+            </div>
+
+            <!-- Subtítulo Tabela Inadimplência -->
+            <div style="font-size: 13px; font-weight: 800; color: #1e9a63; text-transform: uppercase; margin: 4px 0 2px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-hand-holding-dollar"></i> Cobrança de Inadimplência
+            </div>
+
+            <!-- Table layout matching Contas a Receber -->
+            <div class="cp-table-container">
+              <table class="cp-table" id="cobranca-table">
+                <thead>
+                  <tr>
+                    <th class="th-check">
+                      <input type="checkbox" id="check-all-cobranca" onchange="toggleSelectAllCobranca(this)" />
+                    </th>
+                    <th>Vencimento</th>
+                    <th>Cliente</th>
+                    <th>Pedido</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Parcela</th>
+                    <th>Telefone</th>
+                    <th>Observação</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="cobranca-body">
+                  <!-- Row 1 -->
+                  <tr class="selected-row" data-id="c1" data-val="122.24">
+                    <td class="td-check">
+                      <input type="checkbox" class="cobranca-check" checked onchange="updateCobrancaTotal()" />
+                    </td>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><strong>João da Silva Batista</strong></td>
+                    <td>96</td>
+                    <td>Boleto 15/30/45</td>
+                    <td>(2 / 3)</td>
+                    <td>(15) 3278-5530</td>
+                    <td>-</td>
+                    <td><strong>R$122,24</strong></td>
+                    <td>
+                      <span class="status-pill pago" onclick="toggleStatus(this)">
+                        Pago <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr class="selected-row" data-id="c2" data-val="320.55">
+                    <td class="td-check">
+                      <input type="checkbox" class="cobranca-check" checked onchange="updateCobrancaTotal()" />
+                    </td>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><strong>Maria Caetana Oliveira</strong></td>
+                    <td>286</td>
+                    <td>Boleto 10/20</td>
+                    <td>(2 / 2)</td>
+                    <td>(15) 3278-5531</td>
+                    <td>-</td>
+                    <td><strong>R$320,55</strong></td>
+                    <td>
+                      <span class="status-pill pago" onclick="toggleStatus(this)">
+                        Pago <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr data-id="c3" data-val="200.17">
+                    <td class="td-check">
+                      <input type="checkbox" class="cobranca-check" onchange="updateCobrancaTotal()" />
+                    </td>
+                    <td><span class="date-pill">24/08/2026</span></td>
+                    <td><strong>Anastácia de Jesus Lima</strong></td>
+                    <td>387</td>
+                    <td>Boleto 45</td>
+                    <td>-</td>
+                    <td>(15) 3278-6254</td>
+                    <td>Negociação</td>
+                    <td><strong>R$200,17</strong></td>
+                    <td>
+                      <span class="status-pill pendente" onclick="toggleStatus(this)">
+                        Pendente <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr data-id="c4" data-val="42.00">
+                    <td class="td-check">
+                      <input type="checkbox" class="cobranca-check" onchange="updateCobrancaTotal()" />
+                    </td>
+                    <td><span class="date-pill">25/08/2026</span></td>
+                    <td><strong>Odeovaldo Aparecido</strong></td>
+                    <td>564</td>
+                    <td>Dinheiro</td>
+                    <td>-</td>
+                    <td>(15) 3278-9876</td>
+                    <td>Não Atende</td>
+                    <td><strong>R$42,00</strong></td>
+                    <td>
+                      <span class="status-pill pendente" onclick="toggleStatus(this)">
+                        Pendente <i class="fa-solid fa-chevron-down"></i>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Footer Total Inadimplência -->
+            <div class="cp-footer-total">
+              <div class="total-pill-box">
+                <span>Total Inadimplência:</span>
+                <strong id="cobranca-total-display">R$ 442,79</strong>
+              </div>
+            </div>
+
+            <!-- Nova Seção: Movimentação do Caixa -->
+            <div style="font-size: 13px; font-weight: 800; color: #1e9a63; text-transform: uppercase; margin: 16px 0 2px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-cash-register"></i> Movimentação do Caixa (Entradas do Dia)
+            </div>
+
+            <div class="cp-table-container">
+              <table class="cp-table" id="caixa-table">
+                <thead>
+                  <tr>
+                    <th>Data da Entrada</th>
+                    <th>Nome do Cliente</th>
+                    <th>Nº Pedido</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Telefone</th>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody id="caixa-body">
+                  <tr>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><strong>Carlos Eduardo Mendes</strong></td>
+                    <td>#601</td>
+                    <td>Pix</td>
+                    <td>(15) 99712-3344</td>
+                    <td><span class="cat-pill">Ração 15kg</span></td>
+                    <td><strong>R$ 185,50</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><strong>Ana Paula Ferreira</strong></td>
+                    <td>#602</td>
+                    <td>Cartão de Débito</td>
+                    <td>(15) 99821-1122</td>
+                    <td><span class="cat-pill" style="background:#e0f2fe; border-color:#bae6fd; color:#0369a1;">Vacina Antirrábica</span></td>
+                    <td><strong>R$ 95,00</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><strong>Roberto Martins</strong></td>
+                    <td>#603</td>
+                    <td>Dinheiro</td>
+                    <td>(15) 99654-8877</td>
+                    <td><span class="cat-pill" style="background:#fef3c7; border-color:#fde68a; color:#b45309;">Luva Jardineiro</span></td>
+                    <td><strong>R$ 36,27</strong></td>
+                  </tr>
+                  <tr>
+                    <td><span class="date-pill">18/08/2026</span></td>
+                    <td><strong>Sueli Aparecida Godoy</strong></td>
+                    <td>#604</td>
+                    <td>Pix</td>
+                    <td>(15) 99105-4433</td>
+                    <td><span class="cat-pill">Ração Gato 10kg</span></td>
+                    <td><strong>R$ 220,00</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Footer Total Movimentação do Caixa -->
+            <div class="cp-footer-total">
+              <div class="total-pill-box" style="background: linear-gradient(180deg, #39b269 0%, #15803d 100%);">
+                <span>Total Entradas do Dia:</span>
+                <strong>R$ 536,77</strong>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-contratos" class="view-section">
+            <div class="main-header green-header">
+              <h1>PAINEL FINANCEIRO - CONTRATOS</h1>
+            </div>
+
+            <!-- Filter & Action Controls Panel based on image -->
+            <div class="contracts-filter-panel">
+              <div class="contracts-top-row">
+                <!-- Search input pill -->
+                <div class="search-pill-box" style="max-width: 300px;">
+                  <input type="text" id="contract-search" placeholder="Pesquisar" onkeyup="filterContracts()" />
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+
+                <!-- Date filters -->
+                <div class="date-filter-group">
+                  <span>Data Inicial</span>
+                  <div class="date-pill-input">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <input type="date" id="contract-date-start" value="2025-07-01" />
+                  </div>
+                </div>
+
+                <div class="date-filter-group">
+                  <span>Data Fim</span>
+                  <div class="date-pill-input">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <input type="date" id="contract-date-end" value="2026-08-31" />
+                  </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="contracts-actions-group">
+                  <button class="btn-report-action" onclick="editContract()">
+                    EDITAR
+                  </button>
+                  <button class="btn-report-action" onclick="openContractModal()">
+                    INCLUIR
+                  </button>
+                  <button class="btn-report-action" onclick="deleteSelectedContract()">
+                    DELETAR
+                  </button>
+                  <button class="btn-report-action" onclick="printContracts()">
+                    IMPRIMIR
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contract Cards Container matching layout from uploaded image with AGRO green theme -->
+            <div class="contracts-grid" id="contracts-grid">
+              <!-- Card 1: Adimax -->
+              <div class="contract-card" onclick="toggleSelectContractCard(this)">
+                <div class="contract-card-header">
+                  <i class="fa-solid fa-dog"></i>
+                  <span class="contract-card-title">Adimax</span>
+                </div>
+                <div class="contract-card-body">
+                  <ul>
+                    <li>Ração Gato 25 Kg</li>
+                    <li>Ração Cachorro 15 Kg</li>
+                  </ul>
+                </div>
+                <div class="contract-card-footer">
+                  Jul/2025 - Jul/2026
+                </div>
+              </div>
+
+              <!-- Card 2: Pilar Cereais -->
+              <div class="contract-card accent-card" onclick="toggleSelectContractCard(this)">
+                <div class="contract-card-header">
+                  <i class="fa-solid fa-wheat-awn"></i>
+                  <span class="contract-card-title">Pilar Cereais</span>
+                </div>
+                <div class="contract-card-body">
+                  <ul>
+                    <li>Milho 25 Kg</li>
+                    <li>Farelo de Milho 30 Kg</li>
+                  </ul>
+                </div>
+                <div class="contract-card-footer">
+                  Jul/2026 - Ago/2026
+                </div>
+              </div>
+
+              <!-- Card 3: Agro Nutri (Exemplo Adicional) -->
+              <div class="contract-card" onclick="toggleSelectContractCard(this)">
+                <div class="contract-card-header">
+                  <i class="fa-solid fa-seedling"></i>
+                  <span class="contract-card-title">Agro Nutri</span>
+                </div>
+                <div class="contract-card-body">
+                  <ul>
+                    <li>Fertilizante NPK 50 Kg</li>
+                    <li>Semente de Soja 40 Kg</li>
+                  </ul>
+                </div>
+                <div class="contract-card-footer">
+                  Set/2026 - Dez/2026
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="view-relatorios" class="view-section">
+            <div class="main-header green-header">
+              <h1>PAINEL FINANCEIRO - RELATÓRIOS</h1>
+            </div>
+
+            <!-- Controls & Filters Header Panel -->
+            <div class="reports-container">
+              <div class="reports-filter-grid">
+                <!-- Search box with magnifying glass icon -->
+                <div class="search-pill-box">
+                  <input type="text" id="report-search" placeholder="Pesquisar" onkeyup="filterReportContent()" />
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+
+                <!-- Date filters -->
+                <div class="date-filter-group">
+                  <span>Data Inicial</span>
+                  <div class="date-pill-input">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <input type="date" id="report-date-start" value="2026-08-01" />
+                  </div>
+                </div>
+
+                <div class="date-filter-group">
+                  <span>Data Fim</span>
+                  <div class="date-pill-input">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <input type="date" id="report-date-end" value="2026-08-31" />
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="reports-btn-group">
+                  <button class="btn-report-action" onclick="generateSelectedReport()">
+                    VISUALIZAR
+                  </button>
+                  <button class="btn-report-action" onclick="printSelectedReport()">
+                    IMPRIMIR
+                  </button>
+                </div>
+              </div>
+
+              <!-- Two Column Checkbox Options matching image layout -->
+              <div class="report-options-grid">
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="vendas" checked />
+                  Analítico de Vendas
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="dre-detalhado" />
+                  DRE Detalhado
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="receber" />
+                  Analítico de Contas a Receber
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="dre-resumido" />
+                  DRE Resumido
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="pagar" />
+                  Analítico de Contas a Pagar
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="compras" />
+                  Analítico de Contas a Pagar (Compras)
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="fluxo" />
+                  Fluxo de Caixa
+                </label>
+
+                <label class="report-checkbox-label">
+                  <input type="radio" name="report-type" value="perfil-cliente" />
+                  Análise de Perfil por Cliente
+                </label>
+              </div>
+            </div>
+
+            <!-- Dynamic Report Display Area -->
+            <div id="report-output-container" class="report-preview-area">
+              <!-- Content rendered dynamically via JS -->
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+
+    <div id="modal-cp" class="modal-backdrop">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modal-title">Incluir Conta a Pagar</h3>
+          <i class="fa-solid fa-xmark" style="cursor: pointer; color: #94a3b8;" onclick="closeModal()"></i>
+        </div>
+        <div class="modal-body">
+          <div class="field-group">
+            <label>Data</label>
+            <input type="date" id="inp-data" value="2026-08-18" />
+          </div>
+          <div class="field-group">
+            <label>Categoria</label>
+            <select id="inp-categoria">
+              <option value="Ração">Ração</option>
+              <option value="🌱 Sementes">🌱 Sementes</option>
+              <option value="🧪 Fertilizantes">🧪 Fertilizantes</option>
+              <option value="🚜 Maquinário">🚜 Maquinário</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Fornecedor</label>
+            <input type="text" id="inp-fornecedor" placeholder="Ex: Adimax" />
+          </div>
+          <div class="field-group">
+            <label>Descrição</label>
+            <input type="text" id="inp-descricao" placeholder="Ex: Ração Gato 15 Kg" />
+          </div>
+          <div class="field-group">
+            <label>Quantidade</label>
+            <input type="text" id="inp-qtd" placeholder="Ex: 5 SC ou 10 CX" />
+          </div>
+          <div class="field-group">
+            <label>Forma de Pagamento</label>
+            <input type="text" id="inp-forma" placeholder="Ex: Pix, Boleto 15/30" />
+          </div>
+          <div class="field-group">
+            <label>Parcela</label>
+            <input type="text" id="inp-parcela" placeholder="Ex: (1 / 1)" value="(1 / 1)" />
+          </div>
+          <div class="field-group">
+            <label>N° Nota Fiscal</label>
+            <input type="text" id="inp-nf" placeholder="Ex: 36.324" />
+          </div>
+          <div class="field-group">
+            <label>Valor (R$)</label>
+            <input type="number" step="0.01" id="inp-valor" placeholder="0.00" />
+          </div>
+          <div class="field-group">
+            <label>Situação</label>
+            <select id="inp-situacao">
+              <option value="pago">Pago</option>
+              <option value="agendado">Agendado</option>
+              <option value="pendente" selected>Pendente</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+          <button class="btn-primary-action" onclick="saveContaPagar()">Salvar Registro</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Ação realizada com sucesso!</div>
+
+    <script>
+      // Tab Navigation System
+      function switchTab(viewId, element) {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        if(element) element.classList.add('active');
+
+        document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+        
+        const targetView = document.getElementById(`view-${viewId}`);
+        if(targetView) {
+          targetView.classList.add('active');
+          if (viewId === 'relatorios') {
+            generateSelectedReport();
+          }
+        }
+
+        showToast(`Navegando para: ${element ? element.innerText : viewId}`);
+      }
+
+      function generateSelectedReport() {
+        const selectedRadio = document.querySelector('input[name="report-type"]:checked');
+        const reportType = selectedRadio ? selectedRadio.value : 'vendas';
+        const start = document.getElementById('report-date-start').value || '2026-08-01';
+        const end = document.getElementById('report-date-end').value || '2026-08-31';
+        const output = document.getElementById('report-output-container');
+
+        const startDateFormatted = start.split('-').reverse().join('/');
+        const endDateFormatted = end.split('-').reverse().join('/');
+
+        showToast('Gerando relatório selecionado...');
+
+        if (reportType === 'vendas') {
+          output.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h3 style="margin:0; color:#1e9a63; font-size:16px; font-weight:800; text-transform:uppercase;">RELATÓRIO ANALÍTICO DE VENDAS</h3>
+              <span style="font-size:12px; color:#64748b; font-weight:600;">Período: ${startDateFormatted} a ${endDateFormatted}</span>
+            </div>
+            <table class="cp-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Nº Pedido</th>
+                  <th>Cliente</th>
+                  <th>Produto / Categoria</th>
+                  <th>Qtd</th>
+                  <th>Valor Unit.</th>
+                  <th>Total Venda</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>18/08/2026</td>
+                  <td>#2548</td>
+                  <td>João da Silva Batista</td>
+                  <td>Ração Estimada 15kg</td>
+                  <td>2 SC</td>
+                  <td>R$ 162,12</td>
+                  <td><strong>R$ 324,25</strong></td>
+                </tr>
+                <tr>
+                  <td>18/08/2026</td>
+                  <td>#2549</td>
+                  <td>Sch Sabor Frango Ltda</td>
+                  <td>Sch Sabor Frango 20g</td>
+                  <td>50 CX</td>
+                  <td>R$ 41,10</td>
+                  <td><strong>R$ 2.055,06</strong></td>
+                </tr>
+                <tr>
+                  <td>24/08/2026</td>
+                  <td>#2550</td>
+                  <td>Anastácia de Jesus Lima</td>
+                  <td>Ração Petigre 25kg</td>
+                  <td>10 SC</td>
+                  <td>R$ 168,96</td>
+                  <td><strong>R$ 1.689,64</strong></td>
+                </tr>
+                <tr>
+                  <td>25/08/2026</td>
+                  <td>#2551</td>
+                  <td>Oliveira Aparecido</td>
+                  <td>Sch Sabor Carne 20g</td>
+                  <td>30 CX</td>
+                  <td>R$ 53,64</td>
+                  <td><strong>R$ 1.609,27</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="margin-top:14px; text-align:right; font-size:14px; font-weight:800; color:#1e9a63;">
+              TOTAL EM VENDAS NO PERÍODO: <span style="font-size:18px; color:#1e9a63;">R$ 5.678,22</span>
+            </div>
+          `;
+        } else if (reportType === 'dre-detalhado' || reportType === 'dre-resumido') {
+          const isDetailed = reportType === 'dre-detalhado';
+          output.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h3 style="margin:0; color:#1e9a63; font-size:16px; font-weight:800; text-transform:uppercase;">DRE - DEMONSTRATIVO DO RESULTADO DO EXERCÍCIO (${isDetailed ? 'DETALHADO' : 'RESUMIDO'})</h3>
+              <span style="font-size:12px; color:#64748b; font-weight:600;">Período: ${startDateFormatted} a ${endDateFormatted}</span>
+            </div>
+            <table class="cp-table">
+              <thead>
+                <tr>
+                  <th>Descrição da Conta</th>
+                  <th style="text-align:right;">Valor (R$)</th>
+                  <th style="text-align:right;">% Rec. Bruta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#e0f2fe; font-weight:700;">
+                  <td>(=) RECEITA BRUTA DE VENDAS E SERVIÇOS</td>
+                  <td style="text-align:right;">R$ 161.096,24</td>
+                  <td style="text-align:right;">100,0%</td>
+                </tr>
+                ${isDetailed ? `
+                <tr>
+                  <td style="padding-left:24px;">(-) Impostos e Deduções de Vendas</td>
+                  <td style="text-align:right; color:#dc2626;">- R$ 14.498,66</td>
+                  <td style="text-align:right;">- 9,0%</td>
+                </tr>
+                ` : ''}
+                <tr style="font-weight:700;">
+                  <td>(=) RECEITA LÍQUIDA</td>
+                  <td style="text-align:right;">R$ 146.597,58</td>
+                  <td style="text-align:right;">91,0%</td>
+                </tr>
+                <tr>
+                  <td style="padding-left:24px;">(-) Custo dos Produtos Vendidos (CPV)</td>
+                  <td style="text-align:right; color:#dc2626;">- R$ 82.350,00</td>
+                  <td style="text-align:right;">- 51,1%</td>
+                </tr>
+                <tr style="background:#dcfce7; font-weight:800;">
+                  <td>(=) LUCRO BRUTO</td>
+                  <td style="text-align:right; color:#15803d;">R$ 64.247,58</td>
+                  <td style="text-align:right;">39,9%</td>
+                </tr>
+                ${isDetailed ? `
+                <tr>
+                  <td style="padding-left:24px;">(-) Despesas Operacionais / Administrativas</td>
+                  <td style="text-align:right; color:#dc2626;">- R$ 32.260,00</td>
+                  <td style="text-align:right;">- 20,0%</td>
+                </tr>
+                <tr>
+                  <td style="padding-left:24px;">(-) Despesas Financeiras e Fretes</td>
+                  <td style="text-align:right; color:#dc2626;">- R$ 7.127,58</td>
+                  <td style="text-align:right;">- 4,4%</td>
+                </tr>
+                ` : `
+                <tr>
+                  <td style="padding-left:24px;">(-) Despesas Operacionais Totais</td>
+                  <td style="text-align:right; color:#dc2626;">- R$ 39.387,58</td>
+                  <td style="text-align:right;">- 24,4%</td>
+                </tr>
+                `}
+                <tr style="background:#1e9a63; color:#ffffff; font-weight:900; font-size:14px;">
+                  <td>(=) RESULTADO LÍQUIDO DO EXERCÍCIO</td>
+                  <td style="text-align:right; color:#ffffff;">R$ 24.860,00</td>
+                  <td style="text-align:right;">15,4%</td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        } else if (reportType === 'fluxo') {
+          output.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h3 style="margin:0; color:#1e9a63; font-size:16px; font-weight:800; text-transform:uppercase;">RELATÓRIO DE FLUXO DE CAIXA</h3>
+              <span style="font-size:12px; color:#64748b; font-weight:600;">Período: ${startDateFormatted} a ${endDateFormatted}</span>
+            </div>
+            <table class="cp-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Entradas (R$)</th>
+                  <th>Saídas (R$)</th>
+                  <th>Saldo do Dia (R$)</th>
+                  <th>Saldo Acumulado (R$)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>18/08/2026</td>
+                  <td style="color:#16a34a; font-weight:700;">+ R$ 5.678,22</td>
+                  <td style="color:#dc2626; font-weight:700;">- R$ 2.379,31</td>
+                  <td style="font-weight:700;">+ R$ 3.298,91</td>
+                  <td><strong>R$ 161.096,24</strong></td>
+                </tr>
+                <tr>
+                  <td>19/08/2026</td>
+                  <td style="color:#16a34a; font-weight:700;">+ R$ 4.120,00</td>
+                  <td style="color:#dc2626; font-weight:700;">- R$ 1.850,00</td>
+                  <td style="font-weight:700;">+ R$ 2.270,00</td>
+                  <td><strong>R$ 163.366,24</strong></td>
+                </tr>
+                <tr>
+                  <td>20/08/2026</td>
+                  <td style="color:#16a34a; font-weight:700;">+ R$ 3.890,50</td>
+                  <td style="color:#dc2626; font-weight:700;">- R$ 4.200,00</td>
+                  <td style="font-weight:700; color:#dc2626;">- R$ 309,50</td>
+                  <td><strong>R$ 163.056,74</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        } else if (reportType === 'perfil-cliente') {
+          output.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h3 style="margin:0; color:#1e9a63; font-size:16px; font-weight:800; text-transform:uppercase;">ANÁLISE DE PERFIL POR CLIENTE</h3>
+              <span style="font-size:12px; color:#64748b; font-weight:600;">Período: ${startDateFormatted} a ${endDateFormatted}</span>
+            </div>
+            <table class="cp-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Classificação</th>
+                  <th>Total Compras</th>
+                  <th>Forma Preferencial</th>
+                  <th>Inadimplência</th>
+                  <th>Pontuação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>João da Silva Batista</strong></td>
+                  <td><span class="cat-pill">Produtor Freq.</span></td>
+                  <td>R$ 18.450,00</td>
+                  <td>Boleto 15/30/45</td>
+                  <td><span class="status-pill pago">Em Dia</span></td>
+                  <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> 4.8 / 5</td>
+                </tr>
+                <tr>
+                  <td><strong>Maria Catarina Oliveira</strong></td>
+                  <td><span class="cat-pill">Revenda</span></td>
+                  <td>R$ 32.120,00</td>
+                  <td>Boleto 10/20</td>
+                  <td><span class="status-pill pago">Em Dia</span></td>
+                  <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> 4.9 / 5</td>
+                </tr>
+                <tr>
+                  <td><strong>Anastácia de Jesus Lima</strong></td>
+                  <td><span class="cat-pill">Consumidor</span></td>
+                  <td>R$ 4.200,00</td>
+                  <td>Boleto 45</td>
+                  <td><span class="status-pill pendente">Atenção</span></td>
+                  <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> 3.5 / 5</td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        } else {
+          output.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h3 style="margin:0; color:#1e9a63; font-size:16px; font-weight:800; text-transform:uppercase;">RELATÓRIO FINANCEIRO - CONTAS A PAGAR / COMPRAS</h3>
+              <span style="font-size:12px; color:#64748b; font-weight:600;">Período: ${startDateFormatted} a ${endDateFormatted}</span>
+            </div>
+            <table class="cp-table">
+              <thead>
+                <tr>
+                  <th>Vencimento</th>
+                  <th>Fornecedor</th>
+                  <th>Categoria</th>
+                  <th>NF</th>
+                  <th>Forma Pgto</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>18/08/2026</td>
+                  <td>Adimax</td>
+                  <td>Ração</td>
+                  <td>36.324</td>
+                  <td>Pix</td>
+                  <td><strong>R$ 324,25</strong></td>
+                </tr>
+                <tr>
+                  <td>18/08/2026</td>
+                  <td>Adimax</td>
+                  <td>Ração</td>
+                  <td>2.124</td>
+                  <td>Boleto 15/30/45</td>
+                  <td><strong>R$ 2.055,06</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          `;
+        }
+      }
+
+      function printSelectedReport() {
+        showToast('Enviando relatório para a impressora...');
+        window.print();
+      }
+
+      function filterReportContent() {
+        const query = document.getElementById('report-search').value.toLowerCase();
+        const rows = document.querySelectorAll('#report-output-container tbody tr');
+        rows.forEach(row => {
+          const text = row.innerText.toLowerCase();
+          row.style.display = text.includes(query) ? '' : 'none';
+        });
+      }
+
+      // Checkbox Toggle & Sum calculation - Contas a Pagar
+      function updateSelectedTotal() {
+        let total = 0;
+        const rows = document.querySelectorAll('#contas-pagar-body tr');
+        
+        rows.forEach(row => {
+          const check = row.querySelector('.row-check');
+          const valAttr = row.getAttribute('data-val');
+          
+          if(check && check.checked && valAttr) {
+            row.classList.add('selected-row');
+            total += parseFloat(valAttr);
+          } else {
+            row.classList.remove('selected-row');
+          }
+        });
+
+        const formatted = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('cp-total-display').innerText = `R$ ${formatted}`;
+      }
+
+      // Checkbox Toggle & Sum calculation - Cobrança / Contas a Receber
+      function updateCobrancaTotal() {
+        let total = 0;
+        const rows = document.querySelectorAll('#cobranca-body tr');
+        
+        rows.forEach(row => {
+          const check = row.querySelector('.cobranca-check');
+          const valAttr = row.getAttribute('data-val');
+          
+          if(check && check.checked && valAttr) {
+            row.classList.add('selected-row');
+            total += parseFloat(valAttr);
+          } else {
+            row.classList.remove('selected-row');
+          }
+        });
+
+        const formatted = total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('cobranca-total-display').innerText = `R$ ${formatted}`;
+      }
+
+      // Select All Checkboxes - Contas a Pagar
+      function toggleSelectAll(masterCheck) {
+        const checks = document.querySelectorAll('#contas-pagar-body .row-check');
+        checks.forEach(chk => {
+          chk.checked = masterCheck.checked;
+        });
+        updateSelectedTotal();
+      }
+
+      // Select All Checkboxes - Cobrança
+      function toggleSelectAllCobranca(masterCheck) {
+        const checks = document.querySelectorAll('#cobranca-body .cobranca-check');
+        checks.forEach(chk => {
+          chk.checked = masterCheck.checked;
+        });
+        updateCobrancaTotal();
+      }
+
+      // Trigger Collection message
+      function dispararCobranca() {
+        let count = 0;
+        document.querySelectorAll('#cobranca-body tr').forEach(row => {
+          const chk = row.querySelector('.cobranca-check');
+          if(chk && chk.checked && row.getAttribute('data-id')) {
+            count++;
+          }
+        });
+
+        if(count > 0) {
+          showToast(`Disparando notificações para ${count} cliente(s)...`);
+        } else {
+          showToast('Selecione ao menos um cliente para disparar cobrança.');
+        }
+      }
+
+      // Settle payment - Cobrança
+      function baixarCobranca() {
+        let count = 0;
+        document.querySelectorAll('#cobranca-body tr').forEach(row => {
+          const chk = row.querySelector('.cobranca-check');
+          if(chk && chk.checked) {
+            const badge = row.querySelector('.status-pill');
+            if(badge) {
+              badge.className = 'status-pill pago';
+              badge.innerHTML = 'Pago <i class="fa-solid fa-chevron-down"></i>';
+              count++;
+            }
+          }
+        });
+        if(count > 0) {
+          showToast(`Baixa efetuada para ${count} título(s)!`);
+        } else {
+          showToast('Selecione ao menos um título para dar baixa.');
+        }
+      }
+
+      // Delete Cobrança rows
+      function deleteCobrancaRows() {
+        const rows = document.querySelectorAll('#cobranca-body tr');
+        let count = 0;
+        rows.forEach(row => {
+          const chk = row.querySelector('.cobranca-check');
+          if(chk && chk.checked && row.getAttribute('data-id')) {
+            row.remove();
+            count++;
+          }
+        });
+
+        if(count > 0) {
+          showToast(`${count} registro(s) de cobrança deletado(s).`);
+          updateCobrancaTotal();
+        } else {
+          showToast('Selecione itens válidos para deletar.');
+        }
+      }
+
+      // Toggle status on badge click
+      function toggleStatus(badge) {
+        if(badge.classList.contains('pago')) {
+          badge.className = 'status-pill agendado';
+          badge.innerHTML = 'Agenda... <i class="fa-solid fa-chevron-down"></i>';
+          showToast('Situação alterada para Agendado');
+        } else if(badge.classList.contains('agendado')) {
+          badge.className = 'status-pill pendente';
+          badge.innerHTML = 'Pendente <i class="fa-solid fa-chevron-down"></i>';
+          showToast('Situação alterada para Pendente');
+        } else {
+          badge.className = 'status-pill pago';
+          badge.innerHTML = 'Pago <i class="fa-solid fa-chevron-down"></i>';
+          showToast('Situação alterada para Pago');
+        }
+      }
+
+      // Mark selected as Paid
+      function markSelectedPaid() {
+        let count = 0;
+        document.querySelectorAll('#contas-pagar-body tr').forEach(row => {
+          const chk = row.querySelector('.row-check');
+          if(chk && chk.checked) {
+            const badge = row.querySelector('.status-pill');
+            if(badge) {
+              badge.className = 'status-pill pago';
+              badge.innerHTML = 'Pago <i class="fa-solid fa-chevron-down"></i>';
+              count++;
+            }
+          }
+        });
+        if(count > 0) {
+          showToast(`${count} conta(s) marcada(s) como PAGA(S)!`);
+        } else {
+          showToast('Selecione ao menos um item para pagar.');
+        }
+      }
+
+      // Delete selected rows
+      function deleteSelectedRows() {
+        const rows = document.querySelectorAll('#contas-pagar-body tr');
+        let count = 0;
+        rows.forEach(row => {
+          const chk = row.querySelector('.row-check');
+          if(chk && chk.checked && row.getAttribute('data-id')) {
+            row.remove();
+            count++;
+          }
+        });
+
+        if(count > 0) {
+          showToast(`${count} registro(s) deletado(s).`);
+          updateSelectedTotal();
+        } else {
+          showToast('Selecione itens válidos para deletar.');
+        }
+      }
+
+      // Edit Selected Row
+      function editSelectedRow() {
+        const checkedRows = Array.from(document.querySelectorAll('#contas-pagar-body tr')).filter(row => {
+          const chk = row.querySelector('.row-check');
+          return chk && chk.checked && row.getAttribute('data-id');
+        });
+
+        if(checkedRows.length === 1) {
+          openModal('editar');
+        } else if(checkedRows.length > 1) {
+          showToast('Selecione apenas 1 registro para editar por vez.');
+        } else {
+          showToast('Selecione um registro para editar.');
+        }
+      }
+
+      // Modal handlers
+      function openModal(mode) {
+        document.getElementById('modal-title').innerText = mode === 'editar' ? 'Editar Conta a Pagar' : 'Incluir Conta a Pagar';
+        document.getElementById('modal-cp').classList.add('open');
+      }
+
+      function closeModal() {
+        document.getElementById('modal-cp').classList.remove('open');
+      }
+
+      function saveContaPagar() {
+        const dataVal = document.getElementById('inp-data').value;
+        const formattedDate = dataVal ? dataVal.split('-').reverse().join('/') : '18/08/2026';
+        const categoria = document.getElementById('inp-categoria').value;
+        const fornecedor = document.getElementById('inp-fornecedor').value || 'Adimax';
+        const descricao = document.getElementById('inp-descricao').value || 'Ração Especial PED 2.552';
+        const qtd = document.getElementById('inp-qtd').value || '10 CX';
+        const forma = document.getElementById('inp-forma').value || 'Pix';
+        const parcela = document.getElementById('inp-parcela').value || '(1 / 1)';
+        const nf = document.getElementById('inp-nf').value || '55.102';
+        const valorNum = parseFloat(document.getElementById('inp-valor').value) || 250.00;
+        const situacao = document.getElementById('inp-situacao').value;
+
+        const formattedValor = valorNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        let statusHtml = '';
+        if(situacao === 'pago') {
+          statusHtml = `<span class="status-pill pago" onclick="toggleStatus(this)">Pago <i class="fa-solid fa-chevron-down"></i></span>`;
+        } else if(situacao === 'agendado') {
+          statusHtml = `<span class="status-pill agendado" onclick="toggleStatus(this)">Agenda... <i class="fa-solid fa-chevron-down"></i></span>`;
+        } else {
+          statusHtml = `<span class="status-pill pendente" onclick="toggleStatus(this)">Pendente <i class="fa-solid fa-chevron-down"></i></span>`;
+        }
+
+        const newRow = document.createElement('tr');
+        newRow.setAttribute('data-id', Date.now());
+        newRow.setAttribute('data-val', valorNum);
+        newRow.className = 'selected-row';
+
+        newRow.innerHTML = `
+          <td class="td-check"><input type="checkbox" class="row-check" checked onchange="updateSelectedTotal()" /></td>
+          <td><span class="date-pill">${formattedDate}</span></td>
+          <td><span class="cat-pill">${categoria} <i class="fa-solid fa-chevron-down"></i></span></td>
+          <td>${fornecedor}</td>
+          <td>${descricao}</td>
+          <td>${qtd}</td>
+          <td>${forma}</td>
+          <td>${parcela}</td>
+          <td>${nf}</td>
+          <td><strong>R$${formattedValor}</strong></td>
+          <td>${statusHtml}</td>
+        `;
+
+        const tbody = document.getElementById('contas-pagar-body');
+        tbody.insertBefore(newRow, tbody.firstChild);
+
+        closeModal();
+        updateSelectedTotal();
+        showToast('Novo registro incluído com sucesso!');
+      }
+
+      // Show Toast Notification
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2500);
+      }
+
+      // Calculate initial sum on load
+      window.onload = function() {
+        updateSelectedTotal();
+        updateCobrancaTotal();
+      };
+
+      // Contracts management functions
+      function toggleSelectContractCard(card) {
+        document.querySelectorAll('.contract-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        const title = card.querySelector('.contract-card-title').innerText;
+        showToast(`Contrato selecionado: ${title}`);
+      }
+
+      function filterContracts() {
+        const query = document.getElementById('contract-search').value.toLowerCase();
+        const cards = document.querySelectorAll('#contracts-grid .contract-card');
+        cards.forEach(card => {
+          const text = card.innerText.toLowerCase();
+          card.style.display = text.includes(query) ? 'flex' : 'none';
+        });
+      }
+
+      function openContractModal() {
+        showToast('Abrindo formulário de inclusão de contrato...');
+        const supplier = prompt('Nome do Fornecedor / Empresa:');
+        if(!supplier) return;
+        const item1 = prompt('Item 1 do Contrato:') || 'Produto Agrícola';
+        const item2 = prompt('Item 2 do Contrato (opcional):') || '';
+        const period = prompt('Vigência (Ex: Jul/2026 - Jul/2027):') || 'Ago/2026 - Ago/2027';
+
+        const grid = document.getElementById('contracts-grid');
+        const newCard = document.createElement('div');
+        newCard.className = 'contract-card';
+        newCard.onclick = function() { toggleSelectContractCard(this); };
+
+        let itemsHtml = `<li>${item1}</li>`;
+        if(item2) itemsHtml += `<li>${item2}</li>`;
+
+        newCard.innerHTML = `
+          <div class="contract-card-header">
+            <i class="fa-solid fa-file-contract"></i>
+            <span class="contract-card-title">${supplier}</span>
+          </div>
+          <div class="contract-card-body">
+            <ul>
+              ${itemsHtml}
+            </ul>
+          </div>
+          <div class="contract-card-footer">
+            ${period}
+          </div>
+        `;
+
+        grid.appendChild(newCard);
+        showToast(`Novo contrato com ${supplier} incluído com sucesso!`);
+      }
+
+      function editContract() {
+        const selected = document.querySelector('.contract-card.selected');
+        if(selected) {
+          const title = selected.querySelector('.contract-card-title').innerText;
+          showToast(`Editando contrato: ${title}`);
+        } else {
+          showToast('Selecione um contrato clicando sobre o card para editar.');
+        }
+      }
+
+      function deleteSelectedContract() {
+        const selected = document.querySelector('.contract-card.selected');
+        if(selected) {
+          const title = selected.querySelector('.contract-card-title').innerText;
+          selected.remove();
+          showToast(`Contrato com ${title} removido.`);
+        } else {
+          showToast('Selecione um contrato para deletar.');
+        }
+      }
+
+      function printContracts() {
+        showToast('Gerando impressão da lista de contratos...');
+        window.print();
+      }
+    </script>
+  </body>
+</html>
